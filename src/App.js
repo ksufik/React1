@@ -5,11 +5,14 @@ import Message from './components/Message';
 // фигурные скобки обязательны, иначе не работает
 function App({ name }) {
   const text1 = 'Мое первое приложение на Реакте'
-  const [text2, setText2] = useState("Я - проп")
+  const bol = true
+  const [textColor, setTextColor] = useState({ text: 'Желтый', color: bol })
+  const [text2, setText2] = useState(true)
 
-  // Пыталась сделать так, чтобы при клике менялся класс в Message с Message__yellow на green. Как это надо было сделать? В теории вроде понятно, а на практике не получилось.
+
   const handleClick = () => {
-    setText2("I'm a prop")
+    setTextColor({ text: 'Зеленый', color: !bol })
+    setText2(!text2)
   }
 
   return (
@@ -17,7 +20,7 @@ function App({ name }) {
       <header className="App-header">
         My first React App
         <h3>Hello, {name}!</h3>
-        <Message message1={text1} message2={text2} onMessageClick={handleClick} />
+        <Message message1={text1} changeText={textColor} changeColor={text2} onMessageClick={handleClick} />
       </header >
     </div>
   );
