@@ -4,9 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const myName = 'Kseniia'
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* передаем переменную myName в App */}
+    <App name={myName}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,0 +1,12 @@
+/* не получилось использовать здесь БЭМ, как это надо было правильно сделать? */
+.Message__red {
+    color: red;
+}
+
+.Message__green {
+    color: green;
+}
+
+.Message__yellow {
+    color: yellow;
+}
