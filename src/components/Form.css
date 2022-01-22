@@ -1,0 +1,19 @@
+.form {}
+
+.form__input {
+    max-width: 1120px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgb(45, 37, 101);
+    color: white;
+}
+
+.form__submit {
+    background-color: wheat;
+    border-radius: 15px;
+    /* font-size: 15px; */
+    padding: 10px 20px;
+    margin-top: 20px;
+}

@@ -1,27 +1,39 @@
-import { useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import './App.css';
-import Message from './components/Message';
+import { MessagesList } from './components/MessageList';
+import { Form } from './components/Form';
+import { AUTHORS } from './utils/constants';
 
 // фигурные скобки обязательны, иначе не работает
-function App({ name }) {
-  const text1 = 'Мое первое приложение на Реакте'
-  const bol = true
-  const [textColor, setTextColor] = useState({ text: 'Желтый', color: bol })
-  const [text2, setText2] = useState(true)
+function App() {
 
+  const [messages, setMessages] = useState([]);
 
-  const handleClick = () => {
-    setTextColor({ text: 'Зеленый', color: !bol })
-    setText2(!text2)
-  }
+  //так и не поняла useCallback
+  const handleSendMessage = useCallback((newMessage) => {
+    setMessages(prevM => [...prevM, newMessage]);
+  }, []);
+
+  useEffect(() => {
+    if (messages.length && messages[messages.length - 1].author === AUTHORS.user) {
+      const bot = {
+        author: AUTHORS.bot,
+        text: 'Вам ответит первый освободившийся оператор.',
+        check: false,
+        id: `${Date.now()}`
+      }
+
+      setTimeout(() => handleSendMessage(bot), 1000);
+    }
+    // терминал выдавал warning: "React Hook useEffect has a missing dependency: 'handleSendMessage'". Обязательно ли писать handleSendMessage?
+  }, [messages, handleSendMessage]);
 
   return (
     <div className="App">
       <header className="App-header">
-        My first React App
-        <h3>Hello, {name}!</h3>
-        <Message message1={text1} changeText={textColor} changeColor={text2} onMessageClick={handleClick} />
       </header >
+      <MessagesList messages={messages} />
+      <Form onSendMessage={handleSendMessage} />
     </div>
   );
 }
