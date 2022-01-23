@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AUTHORS } from '../utils/constants';
 import './Form.css';
 
 export const Form = ({ onSendMessage }) => {
@@ -13,9 +12,8 @@ export const Form = ({ onSendMessage }) => {
         e.preventDefault();
         if (value !== '') {
             onSendMessage({
-                author: AUTHORS.user,
+                author: "user",
                 text: value,
-                check: true,
                 id: `${Date.now()}`
             });
         }

@@ -17,3 +17,12 @@
     padding: 10px 20px;
     margin-top: 20px;
 }
+
+.form__submit:hover {
+    background-color: rgb(179, 193, 245);
+}
+
+.form__submit:active {
+    background-color: rgb(28, 22, 73);
+    color: white;
+}
