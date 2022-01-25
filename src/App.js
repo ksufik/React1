@@ -2,6 +2,8 @@ import { useCallback, useState, useEffect } from 'react';
 import './App.css';
 import { MessagesList } from './components/MessageList';
 import { Form } from './components/Form';
+import { ListComp } from './components/List';
+
 
 // фигурные скобки обязательны, иначе не работает
 function App() {
@@ -24,15 +26,20 @@ function App() {
       const timeout = setTimeout(() => handleSendMessage(bot), 1000);
       return () => clearTimeout(timeout);
     }
-    // терминал выдавал warning: "React Hook useEffect has a missing dependency: 'handleSendMessage'". Обязательно ли писать handleSendMessage?
   }, [messages, handleSendMessage]);
 
   return (
     <div className="App">
       <header className="App-header">
+        Чат
       </header >
-      <MessagesList messages={messages} />
-      <Form onSendMessage={handleSendMessage} />
+      <div className='flex'>
+        <ListComp />
+        <div className='chat__form'>
+          <MessagesList messages={messages} />
+          <Form onSendMessage={handleSendMessage} />
+        </div>
+      </div>
     </div>
   );
 }

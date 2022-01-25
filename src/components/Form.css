@@ -1,4 +1,9 @@
-.form {}
+.form {
+    border-radius: 10px;
+    background-color: rgba(245, 222, 179, 1);
+    width: 30%;
+    margin: 0 auto;
+}
 
 .form__input {
     max-width: 1120px;
@@ -24,5 +29,9 @@
 
 .form__submit:active {
     background-color: rgb(28, 22, 73);
+    color: white;
+}
+
+.mui {
     color: white;
 }

@@ -22,8 +22,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(20px + 2vmin);
   color: white;
+  padding-top: 10px;
+  background-color: rgb(45, 37, 101);
 }
 
 .App-link {
@@ -38,4 +40,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.flex {
+  display: flex;
+}
+
+.chat__form {
+  flex-grow: 5;
 }
