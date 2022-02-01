@@ -1,7 +1,12 @@
-import React from "react"
-import './MessageList.css'
+import { useEffect } from 'react';
+import './MessageList.sass'
 
 export function MessagesList({ messages }) {
+    useEffect(() => {
+        console.log("messageList did mount");
+
+        return () => console.log("messageList will unmount");
+    }, []);
 
     return <div className="messageList">
         {messages.map(message => {

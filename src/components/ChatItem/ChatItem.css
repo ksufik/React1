@@ -1,0 +1,6 @@
+.chat__form {
+  -webkit-box-flex: 9;
+      -ms-flex-positive: 9;
+          flex-grow: 9;
+}
+/*# sourceMappingURL=ChatItem.css.map */
