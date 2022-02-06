@@ -1,13 +1,13 @@
 // Chats
 import { MessagesList } from '../MessageList/MessageList';
-import { ChatList } from '../ChatList/ChatList';
 import { Form } from '../Form/Form';
 import { AUTHORS } from '../../utils/constants.js'
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from "react-router";
+import './ChatItem.sass'
 
 
-export function ChatItem() {
+export function ChatItem({ chatMessages, setChatMessages, deleted, setDeleted }) {
 
     // const [messages, setMessages] = useState([]);
 
@@ -32,41 +32,18 @@ export function ChatItem() {
 
 
 
-    // содержащиеся в чатах сообщения
-    const initialMessages = {
-        1: [
-            {
-                author: AUTHORS.user,
-                text: "text1",
-                id: Date.now()
-            },
-        ],
-        2: [
-            {
-                author: AUTHORS.user,
-                text: "this is chat2",
-                id: Date.now()
-            },
-        ],
-        3: [{
-            author: AUTHORS.user,
-            text: "text3",
-            id: Date.now()
-        },],
-    };
-
     // Хук useParams предоставляет нам доступные параметры url и обеспечивает обновление компонента при их изменении
     const { chatId } = useParams();
+    //???
     const parentRef = useRef();
 
-    const [chatMessages, setChatMessages] = useState(initialMessages);
 
     const handleSendMessage = useCallback((newMessage) => {
         setChatMessages((prevM) => ({
             ...prevM,
             [chatId]: [...prevM[chatId], newMessage]
         }));
-    }, [chatId]);
+    }, [chatId, setChatMessages]);
 
     useEffect(() => {
 
@@ -82,25 +59,22 @@ export function ChatItem() {
             const timeout = setTimeout(() => handleSendMessage(bot), 1000);
             return () => clearTimeout(timeout);
         }
-    }, [chatMessages, chatId, handleSendMessage]);
+    }, [chatMessages, chatId]);
 
-    if (!chatMessages[chatId]) {
+    if (deleted) {
+        console.log(deleted);
+        //тут выдатся ошибка "Cannot update a component (`App`) while rendering a different component (`ChatItem`)". Как исправить?
+        setDeleted(false);
+        return <Navigate replace to="/chats" />;
+    } else if (!chatMessages[chatId]) {
         return <Navigate replace to="/*" />;
     }
 
-
     return (
-        // <div className='chat__form'>
-        //     <MessagesList messages={messages} />
-        //     <Form onSendMessage={handleSendMessage} />
-        // </div>
-        <div ref={parentRef}>
-            <ChatList />
-            <div className='chat__form'>
-                <MessagesList messages={chatMessages[chatId]}></MessagesList>
-                <Form onSendMessage={handleSendMessage} />
-            </div>
+        <div ref={parentRef} className='chat__form'>
+            <MessagesList messages={chatMessages[chatId]}></MessagesList>
+            <Form onSendMessage={handleSendMessage} />
         </div>
+        // </span>
     )
-
 }
