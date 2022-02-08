@@ -6,12 +6,18 @@ import { ModalWindow } from "../ModalWindow/ModalWindow";
 import './ChatList.sass'
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
+import { useSelector, useDispatch } from "react-redux";
+import { addChat, deleteChat, deleted } from "../../store/chatList/actions"
 
 
 
 
 
-export function ChatList({ chatList, onAddChat, onDeleteChat }) {
+export function ChatList({ }) {
+
+
+    const chats = useSelector(state => state.chatList.chatList);
+    const dispatch = useDispatch();
 
     //для показа модального окна
     const [modalIsShown, setModalIsShown] = useState(false);
@@ -29,34 +35,36 @@ export function ChatList({ chatList, onAddChat, onDeleteChat }) {
         setChatName(e.target.value);
     }
 
+
+
     const handleAddChat = (e) => {
         e.preventDefault();
 
         setInputIsShown(!inputIsShown);
 
         if (chatName !== '') {
-            onAddChat({
-                name: chatName,
-                id: Date.now()
-            });
+            dispatch(addChat(chatName));
         }
 
         setChatName('');
     }
 
+    // const [deleted, setDeleted] = useState(false);
 
-    // const addChat = useCallback((newChat) => {
-    //     setChatList((prev) => ([...prev, newChat]));
+    const handleDeleteChat = (id) => {
+        dispatch(deleted(true));
+        dispatch(deleteChat(id));
+    }
 
-    //     console.log(chatList);
-    // }, [chatList]);
+
+
 
     return (
         <>
             <div className="flex">
                 <ul className="list">
                     <h3>Список чатов</h3>
-                    {chatList.map(chat => (
+                    {chats.map(chat => (
                         <span key={chat.id}>
                             <li className="list__li">
                                 <NavLink className="list__link"
@@ -70,16 +78,17 @@ export function ChatList({ chatList, onAddChat, onDeleteChat }) {
                                     <ModalWindow active={modalIsShown} item={chat.id}></ModalWindow>
 
                                 </div>
-                                <Button name={"Удалить"} onPress={() => onDeleteChat(chat.id)}></Button>
+                                <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteChat(chat.id)}></Button>
                             </li>
                         </span>
                     ))}
                     <form onSubmit={handleAddChat}>
-                        <Button addStyle="button__mt20" name={inputIsShown && chatName === "" ? "Скрыть форму" : "Добавить"} onPress={() => handleAddChat}></Button>
+                        <Button addStyle="button__mt20" inputType="submit" name={inputIsShown && chatName === "" ? "Скрыть форму" : "Добавить"}></Button>
                         <div className="list__input">
                             {inputIsShown && <Input placeholder='Впишите название чата' chatName={chatName} handleChange={handleChange} />}
                         </div>
                     </form>
+                    {/* onPress={() => handleAddChat} */}
                 </ul>
                 <Outlet />
             </div>

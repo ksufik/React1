@@ -1,18 +1,24 @@
-import { PROFILE_ACTION } from "./actions";
+import { PROFILE_CHECKBOX, CHANGE_NAME } from "./actions";
+
 
 const initialState = {
     checkbox: false,
     name: "Profile name"
 }
-
-export const profileReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case PROFILE_ACTION:
+//деструктуризация { type, payload }
+export const profileReducer = (state = initialState, { type, payload }) => {
+    switch (type) {
+        case PROFILE_CHECKBOX:
             return {
                 ...state,
                 checkbox: !state.checkbox
             }
+        case CHANGE_NAME:
+            return {
+                state,
+                name: payload
+            }
         default:
-            return state
+            return state;
     }
 }

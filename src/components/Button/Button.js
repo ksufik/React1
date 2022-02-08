@@ -1,11 +1,12 @@
 import "./Button.sass"
 
 
-export function Button({ label, onPress, name, addStyle }) {
+export function Button({ label, onPress, name, addStyle, inputType }) {
 
     //label для чего-то отличающегося от стандартного названия
     return (
         //
-        <button className={`button ${addStyle}`} onClick={onPress}>{name}</button>
+        <input className={`button ${addStyle}`} type={inputType} value={name} onClick={onPress} />
     )
 }
+

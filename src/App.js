@@ -14,23 +14,6 @@ import { Navigate } from "react-router";
 // фигурные скобки обязательны, иначе не работает
 function App() {
 
-  // массив чатов
-  const initialChats = [
-    {
-      name: "chat1",
-      id: 1,
-    },
-    {
-      name: "chat2222222222",
-      id: 2,
-    },
-    {
-      name: "chat3",
-      id: 3,
-    },
-  ];
-
-
   // содержащиеся в чатах сообщения
   const initialMessages = {
     1: [
@@ -59,48 +42,34 @@ function App() {
     },],
   };
 
-  const [chatList, setChatList] = useState(initialChats);
-  const [chatMessages, setChatMessages] = useState(initialMessages);
-  const [deleted, setDeleted] = useState(false);
+  // const [chatMessages, setChatMessages] = useState(initialMessages);
+  // const [deleted, setDeleted] = useState(false);
 
-  // добавление чата и сообщений 
-  const addChat = useCallback((newChat) => {
+  // // удаление чата и сообщений 
+  // const deleteChat = useCallback((deletingId) => {
 
-    //почему в консоли выводятся предыдущие состояния для списков чатов и сообщений, хотя обновляю функционально???
-    setChatList((prevChatList) => ([...prevChatList, newChat]));
-    setChatMessages((prevMessages) => ({
-      ...prevMessages,
-      [newChat.id]: []
-    }));
-    console.log(chatList);
-    console.log(chatMessages);
-  }, [chatList, chatMessages]);
+  //   setDeleted(true);
+  //   setChatList((prevChatList) =>
+  //     prevChatList.filter(el => el.id !== deletingId)
+  //   );
+  //   // не поняла, как сделать удаление сообщений правильно
+  //   setChatMessages((prevMessages) => {
 
-  // удаление чата и сообщений 
-  const deleteChat = useCallback((deletingId) => {
+  //     // prevMessages.filter(el => el.id !== deletingId)
 
-    setDeleted(true);
-    setChatList((prevChatList) =>
-      prevChatList.filter(el => el.id !== deletingId)
-    );
-    // не поняла, как сделать удаление сообщений правильно
-    setChatMessages((prevMessages) => {
+  //     const newMessages = prevMessages;
+  //     // newMessages.splice(newMessages.deletingId, 1);
+  //     // return newMessages;
 
-      // prevMessages.filter(el => el.id !== deletingId)
-
-      const newMessages = prevMessages;
-      // newMessages.splice(newMessages.deletingId, 1);
-      // return newMessages;
-
-      delete newMessages[deletingId];
-      return newMessages;
-    });
-    console.log(chatList);
-    console.log(chatMessages);
+  //     delete newMessages[deletingId];
+  //     return newMessages;
+  //   });
+  //   console.log(chatList);
+  //   console.log(chatMessages);
 
 
 
-  }, [chatList]);
+  // }, [chatList]);
 
   return (
     <Provider store={store}>
@@ -121,9 +90,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             {/* вложенные руты начинаются с react-router-dom 6 */}
-            <Route path="chats" element={<ChatList chatList={chatList} onAddChat={addChat} onDeleteChat={deleteChat} />} >
+            <Route path="chats" element={<ChatList />} >
               {/* <Route index /> */}
-              <Route path=":chatId" element={<ChatItem chatMessages={chatMessages} setChatMessages={setChatMessages} deleted={deleted} setDeleted={setDeleted} />} />
+              {/* <Route path=":chatId" element={<ChatItem chatMessages={chatMessages} setChatMessages={setChatMessages} deleted={deleted} setDeleted={setDeleted} />} /> */}
+              {/* <Route path=":chatId" element={<ChatItem />} /> */}
             </Route>
             <Route path="profile" element={<Profile />} />
             <Route path="*" element={<h1>404</h1>} />

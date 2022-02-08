@@ -4,10 +4,12 @@ import { Form } from '../Form/Form';
 import { AUTHORS } from '../../utils/constants.js'
 import { useCallback, useEffect, useRef } from 'react';
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { deleted } from "../../store/chatList/actions"
 import './ChatItem.sass'
 
 
-export function ChatItem({ chatMessages, setChatMessages, deleted, setDeleted }) {
+export function ChatItem({ chatMessages, setChatMessages }) {
 
     // const [messages, setMessages] = useState([]);
 
@@ -61,10 +63,13 @@ export function ChatItem({ chatMessages, setChatMessages, deleted, setDeleted })
         }
     }, [chatMessages, chatId]);
 
-    if (deleted) {
-        console.log(deleted);
-        //тут выдатся ошибка "Cannot update a component (`App`) while rendering a different component (`ChatItem`)". Как исправить?
-        setDeleted(false);
+    const deletedFlag = useSelector(state => state.chatList.deleted);
+    const dispatch = useDispatch();
+
+    if (deletedFlag) {
+        console.log(deletedFlag);
+        //тут выдается ошибка "Cannot update a component (`App`) while rendering a different component (`ChatItem`)". Как исправить?
+        dispatch(deleted(false));
         return <Navigate replace to="/chats" />;
     } else if (!chatMessages[chatId]) {
         return <Navigate replace to="/*" />;
@@ -72,7 +77,8 @@ export function ChatItem({ chatMessages, setChatMessages, deleted, setDeleted })
 
     return (
         <div ref={parentRef} className='chat__form'>
-            <MessagesList messages={chatMessages[chatId]}></MessagesList>
+            {/* <MessagesList messages={chatMessages[chatId]}></MessagesList> */}
+            <MessagesList></MessagesList>
             <Form onSendMessage={handleSendMessage} />
         </div>
         // </span>
