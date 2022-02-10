@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useCallback } from 'react';
 import { changeName } from "../../store/profile/actions";
+import { getProfileName } from "../../store/profile/selectors";
 // import { store } from "../../store/index"
 
 export function Profile() {
@@ -9,8 +10,10 @@ export function Profile() {
 
     // const { checkbox, name } = useSelector(state => state);
     const checkbox = useSelector(state => state.checkbox);
-    const name = useSelector(state => state.name);
+    //const name = useSelector(state => state.profile.name);
     const dispatch = useDispatch();
+
+    const name = useSelector(getProfileName);
 
 
     const handleChange = (e) => {

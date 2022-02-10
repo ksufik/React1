@@ -4,7 +4,10 @@ export const DELETED = "CHATLIST_DELETED";
 
 export const addChat = (name) => ({
     type: ADD_CHAT,
-    payload: name
+    payload: {
+        name,
+        id: Date.now() + Math.ceil(Math.random() * 10),
+    }
 });
 
 export const deleteChat = (id) => ({

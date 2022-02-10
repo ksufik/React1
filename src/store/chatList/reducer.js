@@ -50,17 +50,28 @@ export const chatListReducer = (state = initialState, { type, payload }) => {
             // ];
             return {
                 // в чем разница между спредингом стэйт и не спредингом стэйт здесь?
-                // ...state,
+                ...state,
                 chatList: [
                     ...state.chatList,
                     {
-                        id: Date.now() + Math.ceil(Math.random() * 10),
-                        name: payload,
+                        name: payload.name,
+                        id: payload.id,
                     },
                 ],
             };
         case DELETE_CHAT:
-            return state.chatList.filter(({ id }) => id !== payload.id);
+            // return state.chatList.filter(({ id }) => id !== payload.id);
+            let newChat = state.chatList;
+            newChat = newChat.filter(({ id }) => id !== payload.id);
+
+            return {
+                ...state,
+                chatList: newChat,
+            }
+
+
+
+
         // ...state,
         //  chatList: [
 

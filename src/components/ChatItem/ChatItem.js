@@ -1,36 +1,16 @@
 // Chats
 import { MessagesList } from '../MessageList/MessageList';
 import { Form } from '../Form/Form';
-import { AUTHORS } from '../../utils/constants.js'
-import { useCallback, useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { deleted } from "../../store/chatList/actions"
 import './ChatItem.sass'
+import { getDeleted } from "../../store/chatList/selectors";
+import { getMessages } from "../../store/messages/selectors";
 
 
-export function ChatItem({ chatMessages, setChatMessages }) {
-
-    // const [messages, setMessages] = useState([]);
-
-    // const handleSendMessage = useCallback((newMessage) => {
-    //     setMessages(prevM => [...prevM, newMessage]);
-    // }, []);
-
-    // useEffect(() => {
-    // messages[messages.length - 1]?.author === "user"
-    //     if (messages.length && messages[messages.length - 1].author !== "user") {
-    //         const bot = {
-    //             author: "bot",
-    //             text: 'Вам ответит первый освободившийся оператор.',
-    //             id: `${Date.now()}`
-    //         }
-
-    //         const timeout = setTimeout(() => handleSendMessage(bot), 1000);
-    //         return () => clearTimeout(timeout);
-    //     }
-    // }, [messages, handleSendMessage]);
-
+export function ChatItem() {
 
 
 
@@ -38,49 +18,74 @@ export function ChatItem({ chatMessages, setChatMessages }) {
     const { chatId } = useParams();
     //???
     const parentRef = useRef();
+    // Автоматически обновляет данные в компоненте при их изменении в сторе, сравнивает ссылки на старые и на новые данные
+    //const chatMessages = useSelector(state => state.messages.messageList);
+    //const deletedFlag = useSelector(state => state.chatList.deleted);
 
-
-    const handleSendMessage = useCallback((newMessage) => {
-        setChatMessages((prevM) => ({
-            ...prevM,
-            [chatId]: [...prevM[chatId], newMessage]
-        }));
-    }, [chatId, setChatMessages]);
-
-    useEffect(() => {
-
-        // chatMessages[chatId].length && chatMessages[chatId][chatMessages[chatId].length - 1].author !== "bot"
-        if (chatMessages[chatId]?.length && chatMessages[chatId][chatMessages[chatId]?.length - 1].author !== AUTHORS.bot) {
-
-            const bot = {
-                author: AUTHORS.bot,
-                text: 'Вам ответит первый освободившийся оператор.',
-                id: Date.now()
-            }
-
-            const timeout = setTimeout(() => handleSendMessage(bot), 1000);
-            return () => clearTimeout(timeout);
-        }
-    }, [chatMessages, chatId]);
-
-    const deletedFlag = useSelector(state => state.chatList.deleted);
+    //функция для изменения данных в сторе
     const dispatch = useDispatch();
 
+
+
+
+    const chatMessages = useSelector(getMessages, shallowEqual);
+    const deletedFlag = useSelector(getDeleted);
+
+
+    // const handleSendMessage = useCallback((newMessage) => {
+    //     setChatMessages((prevM) => ({
+    //         ...prevM,
+    //         [chatId]: [...prevM[chatId], newMessage]
+    //     }));
+    // }, [chatId, setChatMessages]);
+
+
+    // const handleSendMessage = (text) => {
+    //     console.log(text);
+    //     addMessage(chatId, text);
+    // }
+
+    // useEffect(() => {
+
+    //     // chatMessages[chatId].length && chatMessages[chatId][chatMessages[chatId].length - 1].author !== "bot"
+    //     if (chatMessages[chatId]?.length && chatMessages[chatId][chatMessages[chatId]?.length - 1].author !== AUTHORS.bot) {
+
+    //         const bot = {
+    //             author: AUTHORS.bot,
+    //             text: 'Вам ответит первый освободившийся оператор.',
+    //             id: Date.now()
+    //         }
+
+    //         const timeout = setTimeout(() => handleSendMessage(bot), 1000);
+    //         return () => clearTimeout(timeout);
+    //     }
+    // }, [chatMessages, chatId]);
+
+    useEffect(() => {
+        if (deletedFlag) {
+            dispatch(deleted(false));
+        }
+
+    }, [deletedFlag]);
+
     if (deletedFlag) {
-        console.log(deletedFlag);
-        //тут выдается ошибка "Cannot update a component (`App`) while rendering a different component (`ChatItem`)". Как исправить?
-        dispatch(deleted(false));
+        //Диспатч работает корректно, но после этого действия опять идет проверка deletedFlag и перенаправляет на 404
+        // Как исправить?
+        // dispatch(deleted(false));
         return <Navigate replace to="/chats" />;
     } else if (!chatMessages[chatId]) {
         return <Navigate replace to="/*" />;
     }
 
+
+
     return (
         <div ref={parentRef} className='chat__form'>
-            {/* <MessagesList messages={chatMessages[chatId]}></MessagesList> */}
-            <MessagesList></MessagesList>
-            <Form onSendMessage={handleSendMessage} />
+            {/* <MessagesList messages={chatMessages[chatId] }></MessagesList> */}
+            <MessagesList chatId={chatId}></MessagesList>
+            {/* <Form onSendMessage={() => handleSendMessage()} /> */}
+            <Form chatMessages={chatMessages} chatId={chatId} />
         </div>
-        // </span>
+
     )
 }
