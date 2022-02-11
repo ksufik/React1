@@ -22,6 +22,10 @@
   font-weight: 800;
 }
 
+.messageList__text {
+  word-break: break-all;
+}
+
 .bot {
   text-align: left;
   background-color: #b3c1f5;

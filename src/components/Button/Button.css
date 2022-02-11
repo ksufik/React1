@@ -17,4 +17,9 @@
 .button__mt20 {
   margin-top: 20px;
 }
+
+.button__par {
+  position: absolute;
+  right: 0px;
+}
 /*# sourceMappingURL=Button.css.map */
