@@ -1,13 +1,13 @@
 //ChatList
 import { Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { ModalWindow } from "../ModalWindow/ModalWindow";
 import './ChatList.sass'
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { addChat, deleteChat, deleted } from "../../store/chatList/actions"
+import { addChat, deleteChat, deleted, changeChatName } from "../../store/chatList/actions"
 import { getChatList } from "../../store/chatList/selectors";
 
 
@@ -33,27 +33,34 @@ export function ChatList({ }) {
     }
 
     //для показа инпута
-    const [inputIsShown, setInputIsShown] = useState(false);
+    const [addInputIsShown, setAddInputIsShown] = useState(false);
+    const [changeInputIsShown, setChangeInputIsShown] = useState(false);
 
 
+    const [value, setValue] = useState('');
     const [chatName, setChatName] = useState('');
 
-    const handleChange = (e) => {
+    const handleChangeValue = (e) => {
+        setValue(e.target.value);
+    }
+
+    const handleChangeName = (e) => {
         setChatName(e.target.value);
     }
 
-
+    const inputRef = useRef();
 
     const handleAddChat = (e) => {
         e.preventDefault();
 
-        setInputIsShown(!inputIsShown);
+        setAddInputIsShown(!addInputIsShown);
 
-        if (chatName !== '') {
-            dispatch(addChat(chatName));
+        if (value !== '') {
+            dispatch(addChat(value));
         }
 
-        setChatName('');
+        setValue('');
+        inputRef.current?.focus();
     }
 
     // const [deleted, setDeleted] = useState(false);
@@ -63,6 +70,13 @@ export function ChatList({ }) {
         dispatch(deleteChat(id));
     }
 
+    const handleChangeChatName = (id) => {
+        setChangeInputIsShown(!changeInputIsShown);
+        if (chatName !== '') {
+            dispatch(changeChatName(id, chatName));
+        }
+        setChatName('');
+    }
 
 
 
@@ -86,13 +100,17 @@ export function ChatList({ }) {
 
                                 </div>
                                 <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteChat(chat.id)}></Button>
+
+                                <Button name={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} inputType="button" onPress={() => handleChangeChatName(chat.id)}></Button>
+                                {changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} handleChange={handleChangeName} ></Input>}
+
                             </li>
                         </span>
                     ))}
                     <form onSubmit={handleAddChat}>
-                        <Button addStyle="button__mt20" inputType="submit" name={inputIsShown && chatName === "" ? "Скрыть форму" : "Добавить"}></Button>
+                        <Button addStyle="button__mt20" inputType="submit" name={addInputIsShown && value === "" ? "Скрыть форму" : "Добавить"}></Button>
                         <div className="list__input">
-                            {inputIsShown && <Input placeholder='Впишите название чата' chatName={chatName} handleChange={handleChange} />}
+                            {addInputIsShown && <Input placeholder='Впишите название чата' value={value} handleChange={handleChangeValue} />}
                         </div>
                     </form>
                     {/* onPress={() => handleAddChat} */}

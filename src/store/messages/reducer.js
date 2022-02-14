@@ -1,5 +1,5 @@
 import { AUTHORS } from "../../utils/constants";
-import { ADD_MESSAGE, DELETE_MESSAGE } from "./actions";
+import { ADD_MESSAGE, DELETE_MESSAGE, CHANGE_MESSAGE, IS_CHANGE_MESSAGE } from "./actions";
 import { ADD_CHAT, DELETE_CHAT } from "../chatList/actions";
 
 
@@ -10,28 +10,31 @@ const initialMessages = {
             {
                 author: AUTHORS.user,
                 text: "text1",
-                id: Date.now()
+                id: Date.now() + Math.ceil(Math.random() * 100)
             },
             {
                 author: AUTHORS.user,
                 text: "text1test",
-                id: Date.now() + Math.ceil(Math.random() * 10)
+                id: Date.now() + Math.ceil(Math.random() * 100)
             },
         ],
         2: [
             {
                 author: AUTHORS.user,
                 text: "this is chat2",
-                id: Date.now()
+                id: Date.now() + Math.ceil(Math.random() * 100)
             },
         ],
         3: [{
             author: AUTHORS.user,
             text: "text3",
-            id: Date.now()
+            id: Date.now() + Math.ceil(Math.random() * 100)
         },],
     },
-
+    changed: {
+        change: false,
+        changeId: null,
+    },
 };
 
 
@@ -49,7 +52,7 @@ export const messagesReducer = (state = initialMessages, { type, payload }) => {
                             // author: AUTHORS.user,
                             author: payload.author,
                             text: payload.text,
-                            id: Date.now() + Math.ceil(Math.random() * 10),
+                            id: Date.now() + Math.ceil(Math.random() * 100),
                         },
                     ],
                 },
@@ -70,13 +73,44 @@ export const messagesReducer = (state = initialMessages, { type, payload }) => {
                 (el => el.id !== payload.deletingId));
 
             return newMessages;
-
         }
         case DELETE_CHAT:
             const newMessages = { ...state };
             delete newMessages.messageList[payload.id];
             return newMessages;
+        case CHANGE_MESSAGE:
+            // let messages = state.messageList;
+            // const messageId = state.chatList.findIndex((el) => el.id === payload.id);
+            // messages[messageId] = {
+            //     author: AUTHORS.user,
+            //     text: payload.text,
+            //     id: payload.id
+            // }
+            // return {
+            //     ...state,
+            //     messageList: messages,
+            // }
+            let messages = state.messageList;
+            // const messageId = state.chatList.findIndex((el) => el.id === payload.id);
+            messages[payload.key1][payload.key2] = {
+                author: AUTHORS.user,
+                text: payload.message.text,
+                id: payload.message.id
+            }
+            return {
+                ...state,
+                messageList: messages,
 
+            }
+        case IS_CHANGE_MESSAGE:
+            return {
+                ...state,
+                changed:
+                {
+                    change: payload.change,
+                    changeId: payload.changeId
+                }
+            }
         default:
             return state;
     };

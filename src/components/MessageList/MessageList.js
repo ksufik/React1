@@ -27,11 +27,14 @@ export function MessagesList({ chatId }) {
     const messages = useSelector(getMessages, shallowEqual);
 
 
-
-
-
     const handleDeleteMessage = (id) => {
         dispatch(deleteMessage(chatId, id));
+    }
+
+
+    const handleChangeMessage = (id) => {
+        // dispatch(isChangingMessage(true, id));
+
     }
 
 
@@ -43,6 +46,7 @@ export function MessagesList({ chatId }) {
                     </div>
                     <div className="messageList__text">{message.text}</div>
                     {message.author === AUTHORS.user && <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteMessage(message.id)}></Button>}
+                    {message.author === AUTHORS.user && <Button name={"Изменить - не работает"} inputType="button" onPress={() => handleChangeMessage(message.id)}></Button>}
                 </div>
             )
         }

@@ -9,3 +9,7 @@ export function getChatList(state) {
 export function getDeleted(state) {
     return state.chatList.deleted
 }
+
+// export function getChatName(state) {
+//     return state.chatList.deleted
+// }

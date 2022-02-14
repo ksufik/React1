@@ -1,5 +1,6 @@
+import { children } from "react"
 import "./Input.sass"
-export function Input({ placeholder, value, handleChange }) {
+export function Input({ placeholder, value, handleChange, children }) {
 
     // const [value, setValue] = useState('');
 
