@@ -23,11 +23,12 @@ export const deleteMessage = (chatId, deletingId) => ({
 });
 
 
-export const changeMessage = (key1, key2, message,) => ({
+export const changeMessage = (key1, key2, message, chatId, idToChange, newText) => ({
     type: CHANGE_MESSAGE,
     payload: {
-        key1, key2,
-        message
+        // key1, key2,
+        // message
+        chatId, idToChange, newText
     }
 });
 

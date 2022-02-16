@@ -66,42 +66,31 @@ export const messagesReducer = (state = initialMessages, { type, payload }) => {
                 }
             }
         case DELETE_MESSAGE: {
-            //Проблема с удалением сообщений. Сделала, как у вас (по-другому не получалось). При этом в стейте все работает корректно.
-            //Однако на экране сообщения обновляются только при добавлении нового.
-            const newMessages = { ...state };
-            newMessages.messageList[payload.chatId] = newMessages.messageList[payload.chatId].filter(
-                (el => el.id !== payload.deletingId));
-
-            return newMessages;
+            return {
+                ...state,
+                messageList: {
+                    ...state.messageList,
+                    [payload.chatId]: state.messageList[payload.chatId].filter(
+                        el => el.id !== payload.deletingId)
+                }
+            }
         }
         case DELETE_CHAT:
             const newMessages = { ...state };
             delete newMessages.messageList[payload.id];
             return newMessages;
         case CHANGE_MESSAGE:
-            // let messages = state.messageList;
-            // const messageId = state.chatList.findIndex((el) => el.id === payload.id);
-            // messages[messageId] = {
-            //     author: AUTHORS.user,
-            //     text: payload.text,
-            //     id: payload.id
-            // }
-            // return {
-            //     ...state,
-            //     messageList: messages,
-            // }
-            let messages = state.messageList;
-            // const messageId = state.chatList.findIndex((el) => el.id === payload.id);
-            messages[payload.key1][payload.key2] = {
-                author: AUTHORS.user,
-                text: payload.message.text,
-                id: payload.message.id
-            }
-            return {
-                ...state,
-                messageList: messages,
 
-            }
+            //var3
+            const changeIndex = state.messageList[payload.chatId].findIndex((message) =>
+                message.id === payload.idToChange);
+
+            const newState = { ...state };
+            newState.messageList[payload.chatId][changeIndex] = {
+                ...newState.messageList[payload.chatId][changeIndex],
+                text: payload.newText,
+            };
+            return newState;
         case IS_CHANGE_MESSAGE:
             return {
                 ...state,

@@ -1,5 +1,6 @@
 // Chats
 import { MessagesList } from '../MessageList/MessageList';
+// import { Form } from '../Form/Form with edited msg';
 import { Form } from '../Form/Form';
 import { useRef, useEffect } from 'react';
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from "react-router";
@@ -84,6 +85,7 @@ export function ChatItem() {
             {/* <MessagesList messages={chatMessages[chatId] }></MessagesList> */}
             <MessagesList chatId={chatId}></MessagesList>
             {/* <Form onSendMessage={() => handleSendMessage()} /> */}
+            {/* <Form chatMessages={chatMessages} chatId={chatId} /> */}
             <Form chatMessages={chatMessages} chatId={chatId} />
         </div>
 

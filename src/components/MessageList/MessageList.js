@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { AUTHORS } from '../../utils/constants';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { Button } from '../Button/Button';
-import { deleteMessage } from "../../store/messages/actions"
+import { deleteMessage, isChangingMessage } from "../../store/messages/actions"
 import { getMessages } from "../../store/messages/selectors";
 import { getProfileName } from "../../store/profile/selectors";
 import './MessageList.sass'
@@ -33,8 +33,7 @@ export function MessagesList({ chatId }) {
 
 
     const handleChangeMessage = (id) => {
-        // dispatch(isChangingMessage(true, id));
-
+        dispatch(isChangingMessage(true, id));
     }
 
 
@@ -45,7 +44,9 @@ export function MessagesList({ chatId }) {
                     <div className="messageList__author">{message.author === AUTHORS.user ? profileName : message.author}
                     </div>
                     <div className="messageList__text">{message.text}</div>
-                    {message.author === AUTHORS.user && <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteMessage(message.id)}></Button>}
+                    {/* {message.author === AUTHORS.user &&  */}
+                    <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteMessage(message.id)}></Button>
+                    {/* } */}
                     {message.author === AUTHORS.user && <Button name={"Изменить - не работает"} inputType="button" onPress={() => handleChangeMessage(message.id)}></Button>}
                 </div>
             )

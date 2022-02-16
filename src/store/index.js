@@ -8,7 +8,7 @@ import { messagesReducer } from './messages/reducer'
 import { persistStore, persistReducer } from 'redux-persist'
 
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const config = {
     key: 'MessengerWithReact',
