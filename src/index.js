@@ -4,14 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const myName = 'Kseniia'
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* передаем переменную myName в App */}
-    <App name={myName}/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
+
 );
 
 // If you want to start measuring performance in your app, pass a function
