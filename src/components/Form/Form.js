@@ -105,7 +105,6 @@ export const Form = ({ chatId, chatMessages }) => {
                 {/* {changeMessageFlag.change ?  : */}
                 <Button addStyle='button__mt20 button__submit' onChange={handleChange} inputType="submit" name='Отправить' />
                 <Button name='Подтвердить изменение' inputType='button' addStyle="button__mt20 button__submit" onChange={handleChange} onPress={handleChangeMessage}></Button>
-
             </form>
         </>
     )

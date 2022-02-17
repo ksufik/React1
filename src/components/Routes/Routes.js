@@ -6,6 +6,7 @@ import { Profile } from '../Profile/Profile';
 import { useEffect, useState } from 'react';
 import { useCallback } from 'react';
 import { Navigate } from "react-router";
+import { Anime } from '../Anime/Anime';
 
 export function RoutesComponent() {
 
@@ -23,14 +24,17 @@ export function RoutesComponent() {
                     <li>
                         <Link className="App__link" to="/profile">Profile</Link>
                     </li>
+                    <li>
+                        <Link className="App__link" to="/anime">Anime</Link>
+                    </li>
                 </ul>
 
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="anime" element={<Anime />} />
                     {/* вложенные руты начинаются с react-router-dom 6 */}
                     <Route path="chats" element={<ChatList />} >
                         {/* <Route index /> */}
-                        {/* <Route path=":chatId" element={<ChatItem chatMessages={chatMessages} setChatMessages={setChatMessages} deleted={deleted} setDeleted={setDeleted} />} /> */}
                         <Route path=":chatId" element={<ChatItem />} />
                     </Route>
                     <Route path="profile" element={<Profile />} />

@@ -6,6 +6,7 @@ import { profileReducer } from './profile/reducer'
 import { chatListReducer } from './chatList/reducer'
 import { messagesReducer } from './messages/reducer'
 import { persistStore, persistReducer } from 'redux-persist'
+import { animeReducer } from './anime/reducer'
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -13,7 +14,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const config = {
     key: 'MessengerWithReact',
     storage,
-    blacklist: [],
+    blacklist: ['anime'],
 }
 
 const persistedReducer = persistReducer(
@@ -22,6 +23,7 @@ const persistedReducer = persistReducer(
         chatList: chatListReducer,
         profile: profileReducer,
         messages: messagesReducer,
+        anime: animeReducer,
     })
 )
 
