@@ -25,7 +25,7 @@ export function Anime() {
 
         //     console.log(response);
         //     if (!response.ok) {
-        //         throw new Error('caution: Error');
+        //         throw new Error(`Request failed with status ${response.status}`);
         //     }
 
         //     const result = await response.json();

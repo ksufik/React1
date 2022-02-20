@@ -74,9 +74,10 @@ export function ChatItem() {
         // Как исправить?
         // dispatch(deleted(false));
         return <Navigate replace to="/chats" />;
-    } else if (!chatMessages[chatId]) {
-        return <Navigate replace to="/*" />;
     }
+    // else if (!chatMessages[chatId]) {
+    //     return <Navigate replace to="/*" />;
+    // }
 
 
 

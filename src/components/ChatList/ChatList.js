@@ -7,12 +7,14 @@ import './ChatList.sass'
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { addChat, deleteChat, deleted, changeChatName } from "../../store/chatList/actions"
+import { addChat, deleteChat, deleted, changeChatName, initChatsTracking, addChatWithFb } from "../../store/chatList/actions"
 import { getChatList } from "../../store/chatList/selectors";
+import { onValue, set } from "firebase/database";
+import { chatsRef, getChatRefById } from "../../services/firebase";
 
 
 
-export function ChatList({ }) {
+export function ChatList() {
 
     //с использованием хука, но у него есть минусы:
     // Повторение кода (селектор для имени профиля используется дважды в разных компонентах, и каждый раз создается новая стрелочная функция)
@@ -31,6 +33,24 @@ export function ChatList({ }) {
     const modalCkickHandler = () => {
         setModalIsShown(!modalIsShown);
     }
+
+    // const [chatList, setChatList] = useState([]);
+
+    //перенесен в миддлвар экшена
+    useEffect(() => {
+        //     onValue(chatsRef, (chatsSnap) => {
+        //         console.log(chatsSnap);
+        //         const newChats = [];
+
+        //         chatsSnap.forEach((snapshot) => {
+        //             newChats.push(snapshot.val());
+        //         });
+
+        //         setChatList(newChats);
+        //     })
+
+        dispatch(initChatsTracking());
+    }, []);
 
     //для показа инпута
     const [addInputIsShown, setAddInputIsShown] = useState(false);
@@ -55,8 +75,12 @@ export function ChatList({ }) {
 
         setAddInputIsShown(!addInputIsShown);
 
+        const newId = Date.now() + Math.ceil(Math.random() * 100);
         if (value !== '') {
-            dispatch(addChat(value));
+            //     //  dispatch(addChat(value));
+            //     set(getChatRefById(newId), { name: value, id: newId })
+
+            dispatch(addChatWithFb({ name: value, id: newId }));
         }
 
         setValue('');
@@ -99,18 +123,18 @@ export function ChatList({ }) {
                                     <ModalWindow active={modalIsShown} item={chat.id}></ModalWindow>
 
                                 </div>
-                                <Button name={"Удалить"} inputType="button" onPress={() => handleDeleteChat(chat.id)}></Button>
+                                <Button name={"Удалить"} type="button" onPress={() => handleDeleteChat(chat.id)}></Button>
 
-                                <Button name={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} inputType="button" onPress={() => handleChangeChatName(chat.id)}></Button>
-                                {changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} handleChange={handleChangeName} ></Input>}
+                                <Button name={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} type="button" onPress={() => handleChangeChatName(chat.id)}></Button>
+                                {changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} onChange={handleChangeName} ></Input>}
 
                             </li>
                         </span>
                     ))}
                     <form onSubmit={handleAddChat}>
-                        <Button addStyle="button__mt20" inputType="submit" name={addInputIsShown && value === "" ? "Скрыть форму" : "Добавить"}></Button>
+                        <Button className="button__mt20" type="submit" name={addInputIsShown && value === "" ? "Скрыть форму" : "Добавить"}></Button>
                         <div className="list__input">
-                            {addInputIsShown && <Input placeholder='Впишите название чата' value={value} handleChange={handleChangeValue} />}
+                            {addInputIsShown && <Input placeholder='Впишите название чата' value={value} onChange={handleChangeValue} />}
                         </div>
                     </form>
                     {/* onPress={() => handleAddChat} */}

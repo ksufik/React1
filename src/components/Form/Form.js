@@ -5,6 +5,10 @@ import { AUTHORS } from '../../utils/constants';
 import { getIsChange } from '../../store/messages/selectors'
 import './Form.sass';
 import { Button } from '../Button/Button';
+import { Input } from '../Input/Input';
+
+import { getMsgsRefById } from '../../services/firebase';
+import { push } from "firebase/database";
 
 
 export const Form = ({ chatId, chatMessages }) => {
@@ -35,12 +39,15 @@ export const Form = ({ chatId, chatMessages }) => {
         e.preventDefault();
 
         if (value !== '') {
-            const user = {
+            const newMsg = {
                 author: AUTHORS.user,
                 text: value,
             };
-            dispatch(addMessageWithReply(chatId, user));
+            //   dispatch(addMessageWithReply(chatId, newMsg));
+            push(getMsgsRefById(chatId), newMsg);
         }
+
+
 
         inputRef.current?.focus();
         setValue('');
@@ -97,14 +104,13 @@ export const Form = ({ chatId, chatMessages }) => {
     return (
         <>
             <form className='form' onSubmit={handleSubmit}>
-                <input className='form__input' type="text" value={value}
-                    ref={inputRef}
-                    placeholder='Введите сообщение' onChange={handleChange}>
-                </input>
+                <Input className='input__form' type="text" value={value}
+                    inputRef={inputRef}
+                    placeholder='Введите сообщение' onChange={handleChange} />
 
                 {/* {changeMessageFlag.change ?  : */}
-                <Button addStyle='button__mt20 button__submit' onChange={handleChange} inputType="submit" name='Отправить' />
-                <Button name='Подтвердить изменение' inputType='button' addStyle="button__mt20 button__submit" onChange={handleChange} onPress={handleChangeMessage}></Button>
+                <Button className='button__mt20 button__submit' type="submit" name='Отправить' />
+                <Button name='Подтвердить изменение' type='button' className="button__mt20 button__submit" onPress={handleChangeMessage}></Button>
             </form>
         </>
     )

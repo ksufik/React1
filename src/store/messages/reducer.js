@@ -1,35 +1,35 @@
 import { AUTHORS } from "../../utils/constants";
-import { ADD_MESSAGE, DELETE_MESSAGE, CHANGE_MESSAGE, IS_CHANGE_MESSAGE } from "./actions";
+import { ADD_MESSAGE, DELETE_MESSAGE, CHANGE_MESSAGE, IS_CHANGE_MESSAGE, SET_MESSAGES } from "./actions";
 import { ADD_CHAT, DELETE_CHAT } from "../chatList/actions";
 
 
 const initialMessages = {
 
     messageList: {
-        1: [
-            {
-                author: AUTHORS.user,
-                text: "text1",
-                id: Date.now() + Math.ceil(Math.random() * 100)
-            },
-            {
-                author: AUTHORS.user,
-                text: "text1test",
-                id: Date.now() + Math.ceil(Math.random() * 100)
-            },
-        ],
-        2: [
-            {
-                author: AUTHORS.user,
-                text: "this is chat2",
-                id: Date.now() + Math.ceil(Math.random() * 100)
-            },
-        ],
-        3: [{
-            author: AUTHORS.user,
-            text: "text3",
-            id: Date.now() + Math.ceil(Math.random() * 100)
-        },],
+        // 1: [
+        //     {
+        //         author: AUTHORS.user,
+        //         text: "text1",
+        //         id: Date.now() + Math.ceil(Math.random() * 100)
+        //     },
+        //     {
+        //         author: AUTHORS.user,
+        //         text: "text1test",
+        //         id: Date.now() + Math.ceil(Math.random() * 100)
+        //     },
+        // ],
+        // 2: [
+        //     {
+        //         author: AUTHORS.user,
+        //         text: "this is chat2",
+        //         id: Date.now() + Math.ceil(Math.random() * 100)
+        //     },
+        // ],
+        // 3: [{
+        //     author: AUTHORS.user,
+        //     text: "text3",
+        //     id: Date.now() + Math.ceil(Math.random() * 100)
+        // },],
     },
     changed: {
         change: false,
@@ -99,6 +99,11 @@ export const messagesReducer = (state = initialMessages, { type, payload }) => {
                     change: payload.change,
                     changeId: payload.changeId
                 }
+            }
+        case SET_MESSAGES:
+            return {
+                ...state,
+                messageList: payload.msgs,
             }
         default:
             return state;

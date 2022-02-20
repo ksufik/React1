@@ -1,6 +1,5 @@
-import { children } from "react"
 import "./Input.sass"
-export function Input({ placeholder, value, handleChange, children }) {
+export function Input({ placeholder, value, onChange, type, inputRef, className, currentPassword }) {
 
     // const [value, setValue] = useState('');
 
@@ -9,6 +8,6 @@ export function Input({ placeholder, value, handleChange, children }) {
     // }
 
     return (
-        <input className="input" value={value} onChange={handleChange} placeholder={placeholder}></input>
+        <input className={`input ${className}`} value={value} type={type} ref={inputRef} onChange={onChange} placeholder={placeholder} autoComplete={currentPassword}></input>
     )
 }

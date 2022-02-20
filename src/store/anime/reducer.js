@@ -18,6 +18,7 @@ export const animeReducer = (state = initialState, action) => {
                     //зачем мы здесь копируем request?
                     ...state.request,
                     status: STATUSES.LOADING,
+                    error: "",
                 }
             };
         case REQUEST_ANIME_SUCCESS:

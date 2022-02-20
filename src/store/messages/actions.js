@@ -1,9 +1,12 @@
+import { onValue } from "firebase/database";
+import { messagesRef } from "../../services/firebase";
 import { AUTHORS } from "../../utils/constants";
 
 export const ADD_MESSAGE = "MESSAGES_ADD_MESSAGE";
 export const DELETE_MESSAGE = "MESSAGES_DELETE_MESSAGE";
 export const CHANGE_MESSAGE = "MESSAGES_CHANGE_MESSAGE";
 export const IS_CHANGE_MESSAGE = "MESSAGES_IS_CHANGE_MESSAGE";
+export const SET_MESSAGES = "MESSAGES_SET_MESSAGES";
 
 export const addMessage = (chatId, message) => ({
     type: ADD_MESSAGE,
@@ -42,6 +45,14 @@ export const isChangingMessage = (change, changeId) => ({
 })
 
 
+export const setMsgs = (msgs) => ({
+    type: SET_MESSAGES,
+    payload: {
+        msgs,
+    }
+})
+
+
 let timeout;
 
 // addMessageWithReply - MiddleWare (посредник), где chaId, message - аргументы, dispatch - коллбэк
@@ -63,15 +74,17 @@ export const addMessageWithReply = (chaId, message) => (dispatch) => {
     }
 }
 
+export const initMsgsTracking = () => (dispatch) => {
+    onValue(messagesRef, (snapshot) => {
+        const newMsgs = {};
 
-// export const addMessageWithReply = store => next => (action) => {
-//     if (action.type === ADD_MESSAGE && action.message.author !== AUTHORS.bot) {
-//         const botMessage = {
-//             author: AUTHORS.bot,
-//             text: 'Вам ответит первый освободившийся оператор.',
-//         };
-//         setTimeout(() => store.dispatch(addMessage(botMessage)), 2000);
-//     }
+        snapshot.forEach((chatMsgsSnap) => {
+            newMsgs[chatMsgsSnap.key] = Object.values(
+                chatMsgsSnap.val().messages || {}
+            );
+        });
 
-//     return next(action)
-// }
+        // setMsgs(newMsgs);
+        dispatch(setMsgs(newMsgs));
+    });
+};
