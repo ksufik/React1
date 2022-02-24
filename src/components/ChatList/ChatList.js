@@ -11,6 +11,7 @@ import { addChat, deleteChat, deleted, changeChatName, initChatsTracking, addCha
 import { getChatList } from "../../store/chatList/selectors";
 import { onValue, set } from "firebase/database";
 import { chatsRef, getChatRefById } from "../../services/firebase";
+import { initMsgsTracking } from "../../store/messages/actions";
 
 
 
@@ -50,6 +51,7 @@ export function ChatList() {
         //     })
 
         dispatch(initChatsTracking());
+        dispatch(initMsgsTracking());
     }, []);
 
     //для показа инпута
@@ -123,16 +125,16 @@ export function ChatList() {
                                     <ModalWindow active={modalIsShown} item={chat.id}></ModalWindow>
 
                                 </div>
-                                <Button name={"Удалить"} type="button" onPress={() => handleDeleteChat(chat.id)}></Button>
+                                <Button value={"Удалить"} type="button" onClick={() => handleDeleteChat(chat.id)}></Button>
 
-                                <Button name={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} type="button" onPress={() => handleChangeChatName(chat.id)}></Button>
+                                <Button value={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} type="button" onClick={() => handleChangeChatName(chat.id)}></Button>
                                 {changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} onChange={handleChangeName} ></Input>}
 
                             </li>
                         </span>
                     ))}
                     <form onSubmit={handleAddChat}>
-                        <Button className="button__mt20" type="submit" name={addInputIsShown && value === "" ? "Скрыть форму" : "Добавить"}></Button>
+                        <Button className="button__mt20" type="submit" value={addInputIsShown && value === "" ? "Скрыть форму" : "Добавить"}></Button>
                         <div className="list__input">
                             {addInputIsShown && <Input placeholder='Впишите название чата' value={value} onChange={handleChangeValue} />}
                         </div>

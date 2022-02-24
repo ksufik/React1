@@ -16,7 +16,7 @@ export function Anime() {
     // const [error, setError] = useState(false);
     // const [loading, setLoading] = useState(false);
 
-    const requestAnime = async () => {
+    const requestAnime = () => {
         dispatch(animeList());
 
         // setLoading(true);

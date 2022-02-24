@@ -14,7 +14,6 @@ import { onValue } from 'firebase/database';
 export function MessagesList({ chatId }) {
     useEffect(() => {
         console.log("messageList did mount");
-        dispatch(initMsgsTracking());
         return () => console.log("messageList will unmount");
     }, []);
 
@@ -46,9 +45,9 @@ export function MessagesList({ chatId }) {
                     </div>
                     <div className="messageList__text">{message.text}</div>
                     {/* {message.author === AUTHORS.user &&  */}
-                    <Button name={"Удалить"} type="button" onPress={() => handleDeleteMessage(message.id)}></Button>
+                    <Button value={"Удалить"} type="button" onClick={() => handleDeleteMessage(message.id)}></Button>
                     {/* } */}
-                    {message.author === AUTHORS.user && <Button name={"Изменить - не работает"} type="button" onPress={() => handleChangeMessage(message.id)}></Button>}
+                    {message.author === AUTHORS.user && <Button value={"Изменить - не работает"} type="button" onClick={() => handleChangeMessage(message.id)}></Button>}
                 </div>
             )
         }

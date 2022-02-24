@@ -14,7 +14,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const config = {
     key: 'MessengerWithReact',
     storage,
-    blacklist: ['anime', 'chatList', 'messages', 'profile'],
+    blacklist: ['anime', 'chatList', 'messages'],
 }
 
 const persistedReducer = persistReducer(
@@ -39,3 +39,23 @@ export const persistor = persistStore(store);
 //     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 //     composeEnhancers(applyMiddleware(thunk))
 // );
+
+//правила в fb
+// {
+//     "rules": {
+//       "profile": {
+//         "$user_id": {
+//           ".write": "$user_id === auth.uid",
+//           ".read": "$user_id === auth.uid"
+//         }
+//       },
+//       "messages": {
+//           ".read": "auth != null",
+//           ".write": "auth != null",
+//       },
+//       "chats": {
+//           ".read": "auth != null",
+//           ".write": "auth != null",
+//       }
+//     }
+//   }

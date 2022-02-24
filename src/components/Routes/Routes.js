@@ -5,11 +5,12 @@ import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import { Profile } from '../Profile/Profile';
 import { useEffect } from 'react';
 import { Anime } from '../Anime/Anime';
-import { SignUp } from '../SingUp/SignUp';
-import { auth } from '../../services/firebase'
 import { useDispatch } from 'react-redux';
-import { signIn, signOut } from '../../store/profile/actions';
 import { PrivateRoute } from '../PrivateRoute';
+
+import { auth } from '../../services/firebase'
+import { signIn, signOut } from '../../store/profile/actions';
+
 
 export function RoutesComponent() {
     const dispatch = useDispatch();
@@ -30,6 +31,8 @@ export function RoutesComponent() {
     //     });
     // }, []);
 
+
+    //подписка на изменение авторизации и диспатчит соответствующий экшн
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
@@ -62,27 +65,20 @@ export function RoutesComponent() {
                 </ul>
 
                 <Routes>
-                    <Route path="/" element={<Home />}>
-                    </Route>
-                    <Route path="signup" element={<SignUp />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/signup" element={<Home isSignUp />} />
                     <Route path="anime" element={<Anime />} />
                     {/* вложенные руты начинаются с react-router-dom 6 */}
-                    <Route path="chats" element={
-                        <PrivateRoute>
-                            <ChatList />
-                        </PrivateRoute>} >
-                        {/* <Route index /> */}
-                        <Route path=":chatId" element={
-                            <PrivateRoute>
-                                <ChatItem />
-                            </PrivateRoute>
-                        } />
+                    <Route path="chats" element={<PrivateRoute />} >
+                        <Route path="" element={<ChatList />} >
+                            {/* <Route index /> */}
+                            <Route path=":chatId" element={<ChatItem />
+                            } />
+                        </Route>
                     </Route>
-                    <Route path="profile" element={
-                        <PrivateRoute>
-                            <Profile />
-                        </PrivateRoute>
-                    } />
+                    <Route path="profile" element={<PrivateRoute />} >
+                        <Route path="" element={<Profile />} />
+                    </Route>
                     <Route path="*" element={<h1>404</h1>} />
                 </Routes>
             </div >
@@ -90,3 +86,14 @@ export function RoutesComponent() {
 
     )
 }
+
+{/* <Route path="chats" element={
+    <PrivateRoute>
+        <ChatList />
+    </PrivateRoute>} >
+    <Route path=":chatId" element={
+        <PrivateRoute>
+            <ChatItem />
+        </PrivateRoute>
+    } />
+    </Route> */}

@@ -1,10 +1,10 @@
 import "./Button.sass"
 
 
-export function Button({ onPress, name, className, type, onChange }) {
+export function Button({ onClick, value, className, type }) {
 
     return (
-        <input className={`button ${className}`} type={type} value={name} onChange={onChange} onClick={onPress} />
+        <input className={`button ${className}`} type={type} value={value} onClick={onClick} />
     )
 }
 

@@ -42,6 +42,7 @@ export const Form = ({ chatId, chatMessages }) => {
             const newMsg = {
                 author: AUTHORS.user,
                 text: value,
+                id: Date.now() + Math.ceil(Math.random() * 100),
             };
             //   dispatch(addMessageWithReply(chatId, newMsg));
             push(getMsgsRefById(chatId), newMsg);
@@ -109,8 +110,8 @@ export const Form = ({ chatId, chatMessages }) => {
                     placeholder='Введите сообщение' onChange={handleChange} />
 
                 {/* {changeMessageFlag.change ?  : */}
-                <Button className='button__mt20 button__submit' type="submit" name='Отправить' />
-                <Button name='Подтвердить изменение' type='button' className="button__mt20 button__submit" onPress={handleChangeMessage}></Button>
+                <Button className='button__mt20 button__submit' type="submit" value='Отправить' />
+                <Button value='Подтвердить изменение' type='button' className="button__mt20 button__submit" onClick={handleChangeMessage}></Button>
             </form>
         </>
     )
