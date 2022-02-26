@@ -6,12 +6,12 @@ import { deleteMessage, initMsgsTracking, isChangingMessage } from "../../store/
 import { getMessages } from "../../store/messages/selectors";
 import { getProfileName } from "../../store/profile/selectors";
 import './MessageList.sass'
-import { messagesRef } from '../../services/firebase';
-import { onValue } from 'firebase/database';
+import { getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
+import { onChildRemoved, onValue, remove } from 'firebase/database';
 
 
 
-export function MessagesList({ chatId }) {
+export function MessagesList({ chatId, messages, setMessages }) {
     useEffect(() => {
         console.log("messageList did mount");
         return () => console.log("messageList will unmount");
@@ -25,11 +25,22 @@ export function MessagesList({ chatId }) {
 
 
     const profileName = useSelector(getProfileName);
-    const messages = useSelector(getMessages, shallowEqual);
+    // const messages = useSelector(getMessages, shallowEqual);
 
+    // const [messages, setMessages] = useState([]);
+
+
+    useEffect(() => {
+        const unsubscribe = onChildRemoved(getMsgsRefByChatId(chatId), (snapshot) => {
+            setMessages(prevMsgs => prevMsgs.filter(({ id }) => id !== snapshot.val()?.id));
+        })
+
+        return unsubscribe;
+    }, []);
 
     const handleDeleteMessage = (id) => {
-        dispatch(deleteMessage(chatId, id));
+        // dispatch(deleteMessage(chatId, id));
+        remove(getMessageRefById(chatId, id));
     }
 
 
@@ -38,7 +49,8 @@ export function MessagesList({ chatId }) {
     }
 
     return <div className="messageList">
-        {messages[chatId].map(message => {
+        {/* {messages[chatId].map(message => { */}
+        {messages.map(message => {
             return (
                 <div key={message.id} className={`${message.author === AUTHORS.user ? "messageList__item" : "messageList__item bot"}`}>
                     <div className="messageList__author">{message.author === AUTHORS.user ? profileName : message.author}

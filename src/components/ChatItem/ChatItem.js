@@ -2,7 +2,7 @@
 import { MessagesList } from '../MessageList/MessageList';
 // import { Form } from '../Form/Form with edited msg';
 import { Form } from '../Form/Form';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from "react-router";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { deleted } from "../../store/chatList/actions"
@@ -11,7 +11,7 @@ import { getDeleted } from "../../store/chatList/selectors";
 import { getMessages } from "../../store/messages/selectors";
 
 
-export function ChatItem() {
+export function ChatItem({ chatList }) {
 
 
 
@@ -29,9 +29,11 @@ export function ChatItem() {
 
 
 
-    const chatMessages = useSelector(getMessages, shallowEqual);
+    // const chatMessages = useSelector(getMessages, shallowEqual);
     const deletedFlag = useSelector(getDeleted);
 
+
+    const [chatMessages, setChatMessages] = useState([]);
 
     // const handleSendMessage = useCallback((newMessage) => {
     //     setChatMessages((prevM) => ({
@@ -78,16 +80,21 @@ export function ChatItem() {
     // else if (!chatMessages[chatId]) {
     //     return <Navigate replace to="/*" />;
     // }
-
-
+    // else if (!chatList[chatId] || !chatMessages) {
+    //     return <Navigate replace to="/*" />;
+    // }
 
     return (
         <div ref={parentRef} className='chat__form'>
             {/* <MessagesList messages={chatMessages[chatId] }></MessagesList> */}
-            <MessagesList chatId={chatId}></MessagesList>
+            <MessagesList
+                chatId={chatId}
+                messages={chatMessages}
+                setMessages={setChatMessages}
+            ></MessagesList>
             {/* <Form onSendMessage={() => handleSendMessage()} /> */}
             {/* <Form chatMessages={chatMessages} chatId={chatId} /> */}
-            <Form chatMessages={chatMessages} chatId={chatId} />
+            <Form chatId={chatId} chatMessages={chatMessages} setChatMessages={setChatMessages} />
         </div>
 
     )

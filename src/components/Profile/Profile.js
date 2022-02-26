@@ -5,7 +5,7 @@ import { changeName } from "../../store/profile/actions";
 import { getProfileName } from "../../store/profile/selectors";
 import { Button } from "../Button/Button";
 import { auth, logOut, userIdRef, userRef } from "../../services/firebase";
-import { onValue, set } from "firebase/database";
+import { onChildChanged, onValue, set } from "firebase/database";
 // import { store } from "../../store/index"
 
 export function Profile() {
@@ -18,7 +18,8 @@ export function Profile() {
     //const name = useSelector(state => state.profile.name);
     const dispatch = useDispatch();
 
-    const name = useSelector(getProfileName);
+    // const name = useSelector(getProfileName);
+    const [name, setName] = useState('Profile name');
     // value - значение инпута
     const [value, setValue] = useState('');
 
@@ -50,6 +51,14 @@ export function Profile() {
         setValue(e.target.value);
     }
 
+    useEffect(() => {
+
+        const unsubscribe = onChildChanged(userRef, (chatsSnap) => {
+            setName(chatsSnap.val());
+        })
+        return unsubscribe;
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -58,7 +67,8 @@ export function Profile() {
             set(userRef, {
                 name: value,
             });
-            dispatch(changeName(value));
+            //  dispatch(changeName(value));
+            //  setName(value);
             setValue('');
         }
     };

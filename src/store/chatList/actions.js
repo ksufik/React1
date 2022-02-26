@@ -44,20 +44,20 @@ export const setChats = (chats) => ({
     }
 })
 
-export const addChatWithFb = (newChat) => (dispatch) => {
-    set(getMsgsListRefById(newChat.id), { empty: true });
-    set(getChatRefById(newChat.id), newChat);
-};
+// export const addChatWithFb = (newChat) => (dispatch) => {
+//     set(getMsgsListRefById(newChat.id), { empty: true });
+//     set(getChatRefById(newChat.id), newChat);
+// };
 
-export const initChatsTracking = () => (dispatch) => {
-    onValue(chatsRef, (chatsSnap) => {
-        console.log(chatsSnap);
-        const newChats = [];
+// export const initChatsTracking = () => (dispatch) => {
+//     onValue(chatsRef, (chatsSnap) => {
+//         console.log(chatsSnap);
+//         const newChats = [];
 
-        chatsSnap.forEach((snapshot) => {
-            newChats.push(snapshot.val());
-        });
+//         chatsSnap.forEach((snapshot) => {
+//             newChats.push(snapshot.val());
+//         });
 
-        dispatch(setChats(newChats));
-    });
-};
+//         dispatch(setChats(newChats));
+//     });
+// };

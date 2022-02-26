@@ -72,7 +72,7 @@ export function RoutesComponent() {
                     <Route path="chats" element={<PrivateRoute />} >
                         <Route path="" element={<ChatList />} >
                             {/* <Route index /> */}
-                            <Route path=":chatId" element={<ChatItem />
+                            <Route path=":chatId" element={<ChatItem chatList />
                             } />
                         </Route>
                     </Route>

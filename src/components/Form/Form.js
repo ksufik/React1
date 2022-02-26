@@ -7,11 +7,11 @@ import './Form.sass';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
 
-import { getMsgsRefById } from '../../services/firebase';
-import { push } from "firebase/database";
+import { getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
+import { onChildAdded, push, set } from "firebase/database";
 
 
-export const Form = ({ chatId, chatMessages }) => {
+export const Form = ({ chatId, chatMessages, setChatMessages }) => {
     let [value, setValue] = useState('');
     const inputRef = useRef();
 
@@ -22,6 +22,7 @@ export const Form = ({ chatId, chatMessages }) => {
     //  const changeMessageFlag = useSelector(state => state.messages.change);
 
     const dispatch = useDispatch();
+
 
     const handleChange = (e) => {
         setValue(e.target.value);
@@ -35,6 +36,27 @@ export const Form = ({ chatId, chatMessages }) => {
 
     useEffect(() => { inputRef.current?.focus() }, [])
 
+
+    const newId = Date.now() + Math.ceil(Math.random() * 100);
+
+    useEffect(() => {
+        const unsubscribe = onChildAdded(getMsgsRefByChatId(chatId), (snapshot) => {
+            setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
+
+
+            setTimeout(() => {
+                setChatMessages(prevMsgs => [...prevMsgs, {
+                    id: Date.now() + Math.ceil(Math.random() * 100),
+                    author: AUTHORS.bot,
+                    text: 'Вам ответит первый освободившийся оператор.'
+                }]);
+            }, 1500);
+        });
+
+        return unsubscribe;
+    }, []);
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -45,8 +67,10 @@ export const Form = ({ chatId, chatMessages }) => {
                 id: Date.now() + Math.ceil(Math.random() * 100),
             };
             //   dispatch(addMessageWithReply(chatId, newMsg));
-            push(getMsgsRefById(chatId), newMsg);
+            //   push(getMsgsRefById(chatId), newMsg);
+            set(getMessageRefById(chatId, newMsg.id), newMsg);
         }
+
 
 
 

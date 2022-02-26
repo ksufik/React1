@@ -14,7 +14,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const config = {
     key: 'MessengerWithReact',
     storage,
-    blacklist: ['anime', 'chatList', 'messages'],
+    blacklist: ['anime', 'chatList', 'messages', 'profile'],
 }
 
 const persistedReducer = persistReducer(

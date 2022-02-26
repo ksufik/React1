@@ -28,9 +28,15 @@ export const database = getDatabase(app);
 //если не передавать 2й аргумент, то мы будем следить за всей бд (чаты, сообщения, данные пользователя)
 //здесь мы следим за данными пользователя
 export const userRef = ref(database, 'user');
+
 export const chatsRef = ref(database, 'chatList');
-export const messagesRef = ref(database, 'messageList');
 export const getChatRefById = (id) => ref(database, `chatList/${id}`);
+
+export const messagesRef = ref(database, 'messageList');
 //здесь будет храниться св-во changed
-export const getMsgsListRefById = (chatId) => ref(database, `messageList/${chatId}`);
-export const getMsgsRefById = (chatId) => ref(database, `messageList/${chatId}/messages`);
+//getMessagesRefByChatId
+export const getMsgsListRefByChatId = (chatId) => ref(database, `messageList/${chatId}`);
+// getMessageListRefByChatId
+export const getMsgsRefByChatId = (chatId) => ref(database, `messageList/${chatId}/messages`);
+export const getMessageRefById = (chatId, msgId) =>
+    ref(database, `messageList/${chatId}/messages/${msgId}`);

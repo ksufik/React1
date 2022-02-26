@@ -1,5 +1,5 @@
 //ChatList
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { ModalWindow } from "../ModalWindow/ModalWindow";
@@ -9,9 +9,8 @@ import { Input } from "../Input/Input";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { addChat, deleteChat, deleted, changeChatName, initChatsTracking, addChatWithFb } from "../../store/chatList/actions"
 import { getChatList } from "../../store/chatList/selectors";
-import { onValue, set } from "firebase/database";
+import { onChildAdded, onChildRemoved, onValue, remove, set } from "firebase/database";
 import { chatsRef, getChatRefById } from "../../services/firebase";
-import { initMsgsTracking } from "../../store/messages/actions";
 
 
 
@@ -35,24 +34,7 @@ export function ChatList() {
         setModalIsShown(!modalIsShown);
     }
 
-    // const [chatList, setChatList] = useState([]);
-
-    //перенесен в миддлвар экшена
-    useEffect(() => {
-        //     onValue(chatsRef, (chatsSnap) => {
-        //         console.log(chatsSnap);
-        //         const newChats = [];
-
-        //         chatsSnap.forEach((snapshot) => {
-        //             newChats.push(snapshot.val());
-        //         });
-
-        //         setChatList(newChats);
-        //     })
-
-        dispatch(initChatsTracking());
-        dispatch(initMsgsTracking());
-    }, []);
+    const [chatList, setChatList] = useState([]);
 
     //для показа инпута
     const [addInputIsShown, setAddInputIsShown] = useState(false);
@@ -72,6 +54,26 @@ export function ChatList() {
 
     const inputRef = useRef();
 
+    useEffect(() => {
+        //snapshot - коллбэк, который будет отрабатывать каждый раз при изменении chatsRef
+        //snapshot - это обертка, ближе в бд
+        //onValue - слушатель изменения значения по адресу (chatsRef)
+        //onChildAdded - будет вызываться исключительно при добавлении нового дочернего элемента в chatsRef
+        const unsubscribe = onChildAdded(chatsRef, (chatsSnap) => {
+            //onValue
+            //   const newChats = [];
+            // chatsSnap.forEach((child) => {
+            //     newChats.push(child.val());
+            // });
+            // setChatList(newChats);
+
+            //onChildAdded
+            setChatList(prevChats => [...prevChats, chatsSnap.val()]);
+        })
+
+        return unsubscribe;
+    }, []);
+
     const handleAddChat = (e) => {
         e.preventDefault();
 
@@ -79,21 +81,28 @@ export function ChatList() {
 
         const newId = Date.now() + Math.ceil(Math.random() * 100);
         if (value !== '') {
-            //     //  dispatch(addChat(value));
-            //     set(getChatRefById(newId), { name: value, id: newId })
+            //  dispatch(addChat(value));
+            set(getChatRefById(newId), { id: newId, name: value })
 
-            dispatch(addChatWithFb({ name: value, id: newId }));
         }
 
         setValue('');
         inputRef.current?.focus();
     }
 
-    // const [deleted, setDeleted] = useState(false);
+    useEffect(() => {
+        const unsubscribe = onChildRemoved(chatsRef, (chatsSnap) => {
+            setChatList(prevChats => prevChats.filter(({ id }) => id !== chatsSnap.val()?.id));
+        })
+
+        return unsubscribe;
+    }, []);
 
     const handleDeleteChat = (id) => {
         dispatch(deleted(true));
-        dispatch(deleteChat(id));
+        // dispatch(deleteChat(id));
+        // set(getChatRefById(id), null);
+        remove(getChatRefById(id));
     }
 
     const handleChangeChatName = (id) => {
@@ -106,12 +115,13 @@ export function ChatList() {
 
 
 
+
     return (
         <>
             <div className="flex">
                 <ul className="list">
                     <h3>Список чатов</h3>
-                    {chats.map(chat => (
+                    {chatList.map(chat => (
                         <span key={chat.id}>
                             <li className="list__li">
                                 <NavLink className="list__link"
