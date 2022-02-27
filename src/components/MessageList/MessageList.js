@@ -6,8 +6,9 @@ import { deleteMessage, initMsgsTracking, isChangingMessage } from "../../store/
 import { getMessages } from "../../store/messages/selectors";
 import { getProfileName } from "../../store/profile/selectors";
 import './MessageList.sass'
-import { getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
-import { onChildRemoved, onValue, remove } from 'firebase/database';
+import { getMessageRefById, getMsgsRefByChatId, messagesRef, userRef } from '../../services/firebase';
+import { onChildRemoved, onValue, remove, set } from 'firebase/database';
+import { Form } from '../Form/Form';
 
 
 
@@ -46,6 +47,8 @@ export function MessagesList({ chatId, messages, setMessages }) {
 
     const handleChangeMessage = (id) => {
         dispatch(isChangingMessage(true, id));
+        // set(getMessageRefById(chatId, id), { author: AUTHORS.user, id: id, text: "edited text" });
+
     }
 
     return <div className="messageList">
@@ -55,11 +58,15 @@ export function MessagesList({ chatId, messages, setMessages }) {
                 <div key={message.id} className={`${message.author === AUTHORS.user ? "messageList__item" : "messageList__item bot"}`}>
                     <div className="messageList__author">{message.author === AUTHORS.user ? profileName : message.author}
                     </div>
+                    {/* <div className="messageList__author">{message.author}
+                    </div> */}
+                    {/* <div className="messageList__author">{userName}
+                    </div> */}
                     <div className="messageList__text">{message.text}</div>
                     {/* {message.author === AUTHORS.user &&  */}
                     <Button value={"Удалить"} type="button" onClick={() => handleDeleteMessage(message.id)}></Button>
                     {/* } */}
-                    {message.author === AUTHORS.user && <Button value={"Изменить - не работает"} type="button" onClick={() => handleChangeMessage(message.id)}></Button>}
+                    {message.author === AUTHORS.user && <Button value={"Изменить"} type="button" onClick={() => handleChangeMessage(message.id)}></Button>}
                 </div>
             )
         }

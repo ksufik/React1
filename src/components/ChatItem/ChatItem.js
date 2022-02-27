@@ -34,6 +34,7 @@ export function ChatItem({ chatList }) {
 
 
     const [chatMessages, setChatMessages] = useState([]);
+    // const [changingMsg, setChangingMsg] = useState('');
 
     // const handleSendMessage = useCallback((newMessage) => {
     //     setChatMessages((prevM) => ({
@@ -71,9 +72,7 @@ export function ChatItem({ chatList }) {
 
     }, [deletedFlag]);
 
-    if (deletedFlag) {
-        //Диспатч работает корректно, но после этого действия опять идет проверка deletedFlag и перенаправляет на 404
-        // Как исправить?
+    if (deletedFlag || !chatMessages) {
         // dispatch(deleted(false));
         return <Navigate replace to="/chats" />;
     }

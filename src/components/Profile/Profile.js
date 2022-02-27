@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { changeName } from "../../store/profile/actions";
 import { getProfileName } from "../../store/profile/selectors";
 import { Button } from "../Button/Button";
-import { auth, logOut, userIdRef, userRef } from "../../services/firebase";
+import { auth, logOut, messagesRef, userIdRef, userRef } from "../../services/firebase";
 import { onChildChanged, onValue, set } from "firebase/database";
 // import { store } from "../../store/index"
 
@@ -18,8 +18,8 @@ export function Profile() {
     //const name = useSelector(state => state.profile.name);
     const dispatch = useDispatch();
 
-    // const name = useSelector(getProfileName);
-    const [name, setName] = useState('Profile name');
+    const name = useSelector(getProfileName);
+    // const [name, setName] = useState('');
     // value - значение инпута
     const [value, setValue] = useState('');
 
@@ -53,8 +53,19 @@ export function Profile() {
 
     useEffect(() => {
 
+        const unsubscribe = onValue(userRef, (chatsSnap) => {
+            // setName(chatsSnap.val()?.name);
+            dispatch(changeName(chatsSnap.val()?.name));
+        })
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        // слушатель для изменения св-ва автор в сообщениях
         const unsubscribe = onChildChanged(userRef, (chatsSnap) => {
-            setName(chatsSnap.val());
+            // chatsSnap.forEach(el => console.log(el));
+            console.log(chatsSnap);
+            console.log(messagesRef);
         })
         return unsubscribe;
     }, []);

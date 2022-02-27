@@ -9,7 +9,7 @@ import { Input } from "../Input/Input";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { addChat, deleteChat, deleted, changeChatName, initChatsTracking, addChatWithFb } from "../../store/chatList/actions"
 import { getChatList } from "../../store/chatList/selectors";
-import { onChildAdded, onChildRemoved, onValue, remove, set } from "firebase/database";
+import { onChildAdded, onChildRemoved, onValue, remove, set, onChildChanged } from "firebase/database";
 import { chatsRef, getChatRefById } from "../../services/firebase";
 
 
@@ -82,7 +82,8 @@ export function ChatList() {
         const newId = Date.now() + Math.ceil(Math.random() * 100);
         if (value !== '') {
             //  dispatch(addChat(value));
-            set(getChatRefById(newId), { id: newId, name: value })
+            set(getChatRefById(newId), { id: newId, name: value });
+            //   set(getMsgsListRefByChatId(newId), {empty: true});
 
         }
 
@@ -105,10 +106,31 @@ export function ChatList() {
         remove(getChatRefById(id));
     }
 
+    useEffect(() => {
+        const unsubscribe = onChildChanged(chatsRef, (chatsSnap) => {
+            const changingChat = chatList.findIndex((el) => el.id === chatsSnap.val().id);
+            console.log('chatList2: ', chatList);
+            //     setChatList(chatList[changingChat] = {
+            //     id: chatsSnap.val().id,
+            //     name: chatsSnap.val().name,
+            // });
+            // setChatList(prevChats => prevChats.findIndex((el) => el.id === chatsSnap.val().id));
+            console.log('val: ', chatsSnap.val());
+
+        })
+
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        console.log('chatList: ', chatList);
+    }, [chatList])
+
     const handleChangeChatName = (id) => {
         setChangeInputIsShown(!changeInputIsShown);
         if (chatName !== '') {
-            dispatch(changeChatName(id, chatName));
+            //  dispatch(changeChatName(id, chatName));
+            set(getChatRefById(id), { id: id, name: chatName });
         }
         setChatName('');
     }

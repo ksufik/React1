@@ -9,6 +9,7 @@ import { Input } from '../Input/Input';
 
 import { getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
 import { onChildAdded, push, set } from "firebase/database";
+import { getProfileName } from '../../store/profile/selectors';
 
 
 export const Form = ({ chatId, chatMessages, setChatMessages }) => {
@@ -44,25 +45,26 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
             setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
 
 
-            setTimeout(() => {
-                setChatMessages(prevMsgs => [...prevMsgs, {
-                    id: Date.now() + Math.ceil(Math.random() * 100),
-                    author: AUTHORS.bot,
-                    text: 'Вам ответит первый освободившийся оператор.'
-                }]);
-            }, 1500);
+            //     setTimeout(() => {
+            //         setChatMessages(prevMsgs => [...prevMsgs, {
+            //             id: Date.now() + Math.ceil(Math.random() * 100),
+            //             author: AUTHORS.bot,
+            //             text: 'Вам ответит первый освободившийся оператор.'
+            //         }]);
+            //     }, 1500);
         });
 
         return unsubscribe;
     }, []);
 
-
+    const userName = useSelector(getProfileName);
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (value !== '') {
             const newMsg = {
                 author: AUTHORS.user,
+                //  author: userName,
                 text: value,
                 id: Date.now() + Math.ceil(Math.random() * 100),
             };
@@ -71,42 +73,21 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
             set(getMessageRefById(chatId, newMsg.id), newMsg);
         }
 
-
-
-
         inputRef.current?.focus();
         setValue('');
     }
-
-    //доступ  к тексту сообщения для изменения(не использую)
-    // let [key2, setKey2] = useState();
-    // let [key1, setKey1] = useState();
-
-    // useEffect(() => {
-    //     console.log('value: ', value)
-    //     if (value) {
-    //         setKey1(0);
-    //         setKey2(undefined);
-    //         for (key1 in chatMessages) {
-    //             key2 = (chatMessages[key1].findIndex((el) => el.id === changeMessageFlag.changeId));
-    //             if (key2 !== undefined && key2 !== -1) {
-    //                 setKey1(key1);
-    //                 setKey2(key2);
-    //                 console.log('text', chatMessages[key1][key2].text);
-    //                 break;
-    //             }
-    //         }
-    //         setValue(chatMessages[key1][key2].text);
-    //     }
-    // }, [changeMessageFlag])
 
     //изменение текста сообщения
     const handleChangeMessage = (e) => {
         e.preventDefault();
         console.log('changeMessageFlag1 ', changeMessageFlag);
-        dispatch(changeMessage(chatId, changeMessageFlag.changeId, "edited text"));
-        // dispatch(changeMessage(key1, key2, chatMessages[key1][key2]))
-        dispatch(isChangingMessage(false, null));
+        // dispatch(changeMessage(chatId, changeMessageFlag.changeId, "edited text"));
+        // dispatch(isChangingMessage(false, null));
+
+        if (changeMessageFlag.change) {
+            console.log(getMessageRefById(chatId, changeMessageFlag.changeId));
+            //   setValue(getMessageRefById(chatId, changeMessageFlag.changeId));
+        }
     }
 
     // useEffect(() => {
