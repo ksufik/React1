@@ -1,0 +1,33 @@
+.messageList {
+  background-color: #2d2565;
+  max-width: 1140px;
+  min-height: 200px;
+  border-radius: 15px;
+  margin: 30px auto;
+  padding: 1px 20px;
+  color: black;
+}
+
+.messageList__item {
+  text-align: right;
+  margin: 20px 0;
+  border-radius: 10px;
+  background-color: wheat;
+  padding: 5px 10px;
+}
+
+.messageList__author {
+  color: #1c1649;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.messageList__text {
+  word-break: break-all;
+}
+
+.bot {
+  text-align: left;
+  background-color: #b3c1f5;
+}
+/*# sourceMappingURL=MessageList.css.map */
