@@ -6,7 +6,10 @@ export const SIGN_OUT = "PROFILE_SIGN_OUT";
 // action creators - “создатели экшенов” - функция возвращает новый объект экшена с переданными ей данными
 export const changeName = (newName) => ({
     type: CHANGE_NAME,
-    payload: newName
+    payload:
+    {
+        name: newName,
+    }
 });
 
 export const signIn = () => ({

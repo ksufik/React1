@@ -64,8 +64,8 @@ export function Profile() {
         // слушатель для изменения св-ва автор в сообщениях
         const unsubscribe = onChildChanged(userRef, (chatsSnap) => {
             // chatsSnap.forEach(el => console.log(el));
-            console.log(chatsSnap);
-            console.log(messagesRef);
+            // console.log(chatsSnap);
+            // console.log(messagesRef);
         })
         return unsubscribe;
     }, []);
@@ -77,6 +77,7 @@ export function Profile() {
         if (value !== '') {
             set(userRef, {
                 name: value,
+                id: auth.currentUser.uid,
             });
             //  dispatch(changeName(value));
             //  setName(value);

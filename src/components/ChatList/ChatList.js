@@ -30,14 +30,18 @@ export function ChatList() {
 
     //для показа модального окна
     const [modalIsShown, setModalIsShown] = useState(false);
-    const modalCkickHandler = () => {
-        setModalIsShown(!modalIsShown);
+    const [modalId, setModalId] = useState();
+    const modalCkickHandler = (id) => {
+        // setModalIsShown(!modalIsShown);
+        setModalIsShown((prev) => !prev);
+        setModalId(id);
     }
 
     const [chatList, setChatList] = useState([]);
 
     //для показа инпута
     const [addInputIsShown, setAddInputIsShown] = useState(false);
+    const [changingChatName, setChangingChatName] = useState();
     const [changeInputIsShown, setChangeInputIsShown] = useState(false);
 
 
@@ -89,6 +93,7 @@ export function ChatList() {
 
         setValue('');
         inputRef.current?.focus();
+        setModalIsShown(false);
     }
 
     useEffect(() => {
@@ -99,48 +104,44 @@ export function ChatList() {
         return unsubscribe;
     }, []);
 
-    const handleDeleteChat = (id) => {
-        dispatch(deleted(true));
-        // dispatch(deleteChat(id));
-        // set(getChatRefById(id), null);
-        remove(getChatRefById(id));
-    }
+    // const handleDeleteChat = (id) => {
+    //     dispatch(deleted(true));
+    //     // dispatch(deleteChat(id));
+    //     // set(getChatRefById(id), null);
+    //     remove(getChatRefById(id));
+    // }
 
     useEffect(() => {
         const unsubscribe = onChildChanged(chatsRef, (chatsSnap) => {
-            const changingChat = chatList.findIndex((el) => el.id === chatsSnap.val().id);
-            console.log('chatList2: ', chatList);
-            //     setChatList(chatList[changingChat] = {
-            //     id: chatsSnap.val().id,
-            //     name: chatsSnap.val().name,
-            // });
-            // setChatList(prevChats => prevChats.findIndex((el) => el.id === chatsSnap.val().id));
-            console.log('val: ', chatsSnap.val());
-
+            const changingChatIndex = chatList.findIndex((el) => el.id === chatsSnap.val().id);
+            const copy = [...chatList];
+            copy[changingChatIndex] = {
+                id: chatsSnap.val().id,
+                name: chatsSnap.val().name,
+            };
+            setChatList(copy);
         })
 
         return unsubscribe;
     }, []);
 
-    useEffect(() => {
-        console.log('chatList: ', chatList);
-    }, [chatList])
+    // const handleChangeChatName = (id) => {
+    //     setChangingChatName(id);
+    //     setChangeInputIsShown((prevState) => !prevState);
 
-    const handleChangeChatName = (id) => {
-        setChangeInputIsShown(!changeInputIsShown);
-        if (chatName !== '') {
-            //  dispatch(changeChatName(id, chatName));
-            set(getChatRefById(id), { id: id, name: chatName });
-        }
-        setChatName('');
-    }
+    //     if (chatName !== '') {
+    //         //  dispatch(changeChatName(id, chatName));
+    //         set(getChatRefById(id), { id: id, name: chatName });
+    //     }
+    //     setChatName('');
+    // }
 
 
 
 
     return (
         <>
-            <div className="flex">
+            <div className="flex">{console.log('chatList: ', chatList)}
                 <ul className="list">
                     <h3>Список чатов</h3>
                     {chatList.map(chat => (
@@ -152,15 +153,17 @@ export function ChatList() {
                                     {chat.name}
                                 </NavLink>
                                 <div className="list__modal" >
-                                    <div className="list__modal__mark" onClick={modalCkickHandler} >:
+                                    <div className="list__modal__mark"
+                                        onClick={() => modalCkickHandler(chat.id)}
+                                    >:
                                     </div>
-                                    <ModalWindow active={modalIsShown} item={chat.id}></ModalWindow>
+                                    {modalIsShown && modalId === chat.id && <ModalWindow active={modalIsShown} item={chat.id} setModalIsShown={setModalIsShown}></ModalWindow>}
 
                                 </div>
-                                <Button value={"Удалить"} type="button" onClick={() => handleDeleteChat(chat.id)}></Button>
+                                {/* <Button value={"Удалить"} type="button" onClick={() => handleDeleteChat(chat.id)}></Button>
 
                                 <Button value={changeInputIsShown && chatName === "" ? "Скрыть форму" : "Изменить название"} type="button" onClick={() => handleChangeChatName(chat.id)}></Button>
-                                {changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} onChange={handleChangeName} ></Input>}
+                                {changingChatName === chat.id && changeInputIsShown && <Input placeholder='Впишите название чата' value={chatName} onChange={handleChangeName} ></Input>} */}
 
                             </li>
                         </span>

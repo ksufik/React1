@@ -84,7 +84,7 @@ export function ChatItem({ chatList }) {
     // }
 
     return (
-        <div ref={parentRef} className='chat__form'>
+        <div ref={parentRef} className='chat__form'>{console.log('chatMessages: ', chatMessages)}
             {/* <MessagesList messages={chatMessages[chatId] }></MessagesList> */}
             <MessagesList
                 chatId={chatId}

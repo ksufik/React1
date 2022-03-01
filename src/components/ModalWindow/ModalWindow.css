@@ -2,21 +2,11 @@
   position: absolute;
   left: 10px;
   top: 5px;
+  background-color: white;
+  border-radius: 15px;
 }
 
 .modalWindow__content {
-  padding: 20px;
-  border-radius: 12px;
-  background-color: green;
-}
-
-.modalWindow__open {
-  width: 100px;
-  height: 70px;
-  background-color: white;
-}
-
-.modalWindow__close {
-  display: none;
+  padding: 5px;
 }
 /*# sourceMappingURL=ModalWindow.css.map */

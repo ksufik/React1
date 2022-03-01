@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { Anime } from '../Anime/Anime';
 import { useDispatch } from 'react-redux';
 import { PrivateRoute } from '../PrivateRoute';
+import { PublicRoute } from '../PublicRoute';
 
 import { auth } from '../../services/firebase'
 import { signIn, signOut } from '../../store/profile/actions';
@@ -65,7 +66,9 @@ export function RoutesComponent() {
                 </ul>
 
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<PublicRoute />} >
+                        <Route path="" element={<Home />} />
+                    </Route>
                     <Route path="/signup" element={<Home isSignUp />} />
                     <Route path="anime" element={<Anime />} />
                     {/* вложенные руты начинаются с react-router-dom 6 */}

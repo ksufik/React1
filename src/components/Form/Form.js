@@ -7,8 +7,8 @@ import './Form.sass';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
 
-import { getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
-import { onChildAdded, push, set } from "firebase/database";
+import { auth, getMessageRefById, getMsgsRefByChatId, messagesRef } from '../../services/firebase';
+import { onChildAdded, onValue, push, set } from "firebase/database";
 import { getProfileName } from '../../store/profile/selectors';
 
 
@@ -40,9 +40,16 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
 
     const newId = Date.now() + Math.ceil(Math.random() * 100);
 
+    const [msgId, setMsgId] = useState();
+
     useEffect(() => {
-        const unsubscribe = onChildAdded(getMsgsRefByChatId(chatId), (snapshot) => {
-            setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
+        const unsubscribe = onValue(getMsgsRefByChatId(chatId), (snapshot) => {
+            // setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
+            // console.log('snapshot.val(): ', snapshot.val());
+            // setChatMessages((prevMsgs) => [...prevMsgs, { [chatId]: snapshot.val() }]);
+            //   setChatMessages([{ [chatId]: snapshot.val() }]);
+            // setChatMessages([snapshot.val()]);
+            console.log('snapshot.val(): ', snapshot.val());
 
 
             //     setTimeout(() => {
@@ -55,7 +62,9 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
         });
 
         return unsubscribe;
-    }, []);
+    }, [chatId]);
+
+
 
     const userName = useSelector(getProfileName);
     const handleSubmit = (e) => {
@@ -63,7 +72,7 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
 
         if (value !== '') {
             const newMsg = {
-                author: AUTHORS.user,
+                author: auth.currentUser.uid,
                 //  author: userName,
                 text: value,
                 id: Date.now() + Math.ceil(Math.random() * 100),
