@@ -61,6 +61,7 @@ export function MessagesList({ chatId, messages, setMessages }) {
     }, []);
 
     return <div className="messageList">
+        {console.log('messages: ', messages)}
         {/* {messages[chatId].map(message => { */}
         {messages.map(message => {
             { console.log('message: ', message) }

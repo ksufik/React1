@@ -23,7 +23,6 @@ export const animeList = () => async (dispatch) => {
     dispatch(animeLoading());
     try {
         const response = await fetch(apiUrl)
-        console.log(response);
 
         if (!response.ok) {
             throw new Error(`Request failed with status ${response.status}`);
@@ -32,11 +31,13 @@ export const animeList = () => async (dispatch) => {
         const result = await response.json();
 
         dispatch(animeSuccess(result.data));
+        //   console.log(result.data)
+        //dispatch(animeSuccess(result));
+
 
     }
     //если мы сами определяем тип ошибки или текст
     // catch (err) {
-    //     console.error(err);
     //     dispatch(getAnimeFailure(err.message));
     // }
 

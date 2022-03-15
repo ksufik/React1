@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { Button } from "..";
+import { Button } from "../Button";
 
 describe("Button tests", () => {
     it("matches snaphot", () => {
@@ -24,6 +24,5 @@ describe("Button tests", () => {
         );
 
         expect(onClick).toHaveBeenCalledTimes(1);
-        expect(onClick).toHaveBeenCalledWith("");
     });
 });

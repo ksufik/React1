@@ -42,25 +42,66 @@ export const Form = ({ chatId, chatMessages, setChatMessages }) => {
 
     const [msgId, setMsgId] = useState();
 
+    // useEffect(() => {
+    //     const unsubscribe = onChildAdded(getMsgsRefByChatId(chatId), (snapshot) => {
+    //         // setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
+    //         console.log('snapshot.val(): ', snapshot.val());
+    //         // setChatMessages((prevMsgs) => [...prevMsgs, { [chatId]: snapshot.val() }]);
+    //         //   setChatMessages([{ [chatId]: snapshot.val() }]);
+    //         // snapshot.forEach(element => {
+    //         //     const msgs = {
+    //         //         [chatId]: [
+    //         //             {
+    //         //                 author: element.val().author,
+    //         //                 id: element.val().id,
+    //         //                 text: element.val().text,
+    //         //             }
+    //         //         ]
+    //         //     }
+    //         //     console.log('element.val(): ', element.val());
+
+    //             //     console.log('msgs: ', msgs);
+    //            // setChatMessages((prev) => [...prev, msgs]);
+    //             // setChatMessages([msgs]);
+    //             // snapshot.forEach(element => {
+    //             //     setChatMessages(element.val());
+    //             // }
+    //             // const msgs = {
+    //             //     [chatId]: [
+    //             //         //  Object.values(snapshot.val()),
+
+    //             //         ]
+    //             // }
+
+    //             // setChatMessages([msgs]);
+    //         })
+
+    //         //  setChatMessages([Object.values(snapshot.val())]);
+
+    //         //  setChatMessages((prevMsgs) => [[chatId]: [...prevMsgs,  element.val()]]);
+
+    //         // console.log('snapshot.val(): ', Object.values(snapshot.val()));
+
+
+    //         //     setTimeout(() => {
+    //         //         setChatMessages(prevMsgs => [...prevMsgs, {
+    //         //             id: Date.now() + Math.ceil(Math.random() * 100),
+    //         //             author: AUTHORS.bot,
+    //         //             text: 'Вам ответит первый освободившийся оператор.'
+    //         //         }]);
+    //         //     }, 1500);
+    //     });
+
+    //     return unsubscribe;
+    // }, [chatId]);
+
     useEffect(() => {
-        const unsubscribe = onValue(getMsgsRefByChatId(chatId), (snapshot) => {
-            // setChatMessages((prevMsgs) => [...prevMsgs, snapshot.val()]);
-            // console.log('snapshot.val(): ', snapshot.val());
-            // setChatMessages((prevMsgs) => [...prevMsgs, { [chatId]: snapshot.val() }]);
-            //   setChatMessages([{ [chatId]: snapshot.val() }]);
-            // setChatMessages([snapshot.val()]);
-            console.log('snapshot.val(): ', snapshot.val());
-
-
-            //     setTimeout(() => {
-            //         setChatMessages(prevMsgs => [...prevMsgs, {
-            //             id: Date.now() + Math.ceil(Math.random() * 100),
-            //             author: AUTHORS.bot,
-            //             text: 'Вам ответит первый освободившийся оператор.'
-            //         }]);
-            //     }, 1500);
+        const unsubscribe = onChildAdded(getMsgsRefByChatId(chatId), (snapshot) => {
+            console.log('snapshot.val():', snapshot.val());
+            // setChatMessages(Object.values(snapshot.val() || {}));
+            // setChatMessages((prev) => [...prev, snapshot.val()] || {});
+            setChatMessages(snapshot.val() || {});
         });
-
         return unsubscribe;
     }, [chatId]);
 

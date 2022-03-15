@@ -1,4 +1,6 @@
-import { animeLoading, animeSuccess, animeFailure, animeList } from '../actions'
+//import { fetchMock } from 'jest-fetch-mock';
+import fetchMock from 'jest-fetch-mock';
+import { animeLoading, animeSuccess, animeFailure, animeList, REQUEST_ANIME_SUCCESS, REQUEST_ANIME_LOADING, REQUEST_ANIME_FAILURE } from '../actions'
 import { } from '../reducer'
 
 describe("animeStatus tests", () => {
@@ -36,7 +38,7 @@ it("animeFailure", () => {
     expect(expected).toEqual(received);
 });
 
-describe("animeList", () => {
+describe("animeList tests", () => {
     it("calls fn passed as an arg with animeLoading", () => {
         const mockDispatch = jest.fn();
 
@@ -62,7 +64,7 @@ describe("animeList", () => {
         // eslint-disable-next-line no-undef
         fetchMock.mockRejectOnce(error);
 
-        await getArticles()(mockDispatch);
+        await animeList()(mockDispatch);
 
         expect(mockDispatch).toHaveBeenLastCalledWith(animeFailure(error));
     });
